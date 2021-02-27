@@ -1,0 +1,5 @@
+vk_api
+re
+bs4
+requests
+sqlite3
