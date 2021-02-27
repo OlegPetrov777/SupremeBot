@@ -26,7 +26,7 @@ keyboard.add_button('Календарь релизов')
 keyboard.add_line()
 keyboard.add_button('Связь с админом')
 keyboard.add_line()
-keyboard.add_button('Перезагрузить бота')
+keyboard.add_button('Перезагрузить бота', color=NEGATIVE)
 
 # для админа
 keyboard_admin = VkKeyboard(one_time=False)
