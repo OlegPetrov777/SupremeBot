@@ -100,7 +100,6 @@ for event in long_poll.listen():
         msg = event.text  # само сообщение
         id = event.user_id  # id пользователя
 
-
 # ЗАПИСЬ РЕЛИЗОВ
         if admin_id is not None and load_photo:
             # открыл файл на запись
