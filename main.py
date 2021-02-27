@@ -50,11 +50,11 @@ keyboard_product.add_button('Назад')
 
 # для выбора курса
 keyboard_eur = VkKeyboard(one_time=False)
-keyboard_eur.add_button(f"Сбербанк [{get_eur_Sber()}]", color=VkKeyboardColor.SECONDARY)
+keyboard_eur.add_button(f"Сбербанк [{get_eur_Sber()}]")
 keyboard_eur.add_line()
-keyboard_eur.add_button(f"Тинькофф [{get_eur_Tinkoff()}]", color=VkKeyboardColor.SECONDARY)
+keyboard_eur.add_button(f"Тинькофф [{get_eur_Tinkoff()}]")
 keyboard_eur.add_line()
-keyboard_eur.add_button('Назад', color=VkKeyboardColor.NEGATIVE)
+keyboard_eur.add_button('Назад')
 
 
 """ ОТПРАВКА СООБЩЕНИЙ """
