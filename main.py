@@ -30,7 +30,7 @@ keyboard.add_button('Перезагрузить бота', color='negative')
 
 # для админа
 keyboard_admin = VkKeyboard(one_time=False)
-keyboard_admin.add_button('Загрузить фото', color='secondary')
+keyboard_admin.add_button('Загрузить фото', color='positive')
 keyboard_admin.add_line()
 keyboard_admin.add_button('Очистить список релизов', color='secondary')
 keyboard_admin.add_line()
