@@ -1,5 +1,3 @@
 vk_api==11.8.0
-re
-bs4
-requests
-sqlite3
+bs4==0.0.1
+requests==2.25.1
