@@ -238,8 +238,7 @@ for event in long_poll.listen():
 
             elif msg == "Календарь релизов":
                 with open('photos_id.txt', 'r') as file_r:
-                    file_r = file_r.encode("utf-8")
-                    file_r = file_r.read()
+                    file_r = file_r.read().decode('utf8')
                     if file_r != "":
                         text_dict = file_r.split(";")
                         for txt in text_dict:
