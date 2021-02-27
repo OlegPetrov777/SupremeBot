@@ -1,4 +1,4 @@
-vk_api-11.9.2
+vk_api-11.9.1
 re
 bs4
 requests
