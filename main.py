@@ -18,7 +18,7 @@ upload = vk_api.VkUpload(vk_session)
 """ КНОПКИ """
 # для юзера
 keyboard = VkKeyboard(one_time=False)
-keyboard.add_button('Калькулятор')
+keyboard.add_button('Калькулятор', color=VkKeyboardColor.SECONDARY)
 keyboard.add_button('Услуги группы', color=VkKeyboardColor.SECONDARY)
 keyboard.add_line()
 keyboard.add_button('Таблица размеров', color=VkKeyboardColor.SECONDARY)
