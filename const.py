@@ -35,8 +35,7 @@ def get_eur_Tinkoff():  # Курс евро в Тинькофф
         print("Страница не найдена")
 
 """ КОНСТАНТЫ """
-TOKEN = os.environ.get(BOT_TOKEN)
-
+TOKEN = "96fb5dcb8c535bfa809325050910b88af2a54c9be455e18bd48e6d94fbf9a1fb2e71a137ec2f8ccd85e62"
 nike_size = 'photo-188973350_457239023'
 admin_id = None
 load_photo = False
