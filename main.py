@@ -1,7 +1,6 @@
 import re
 import vk_api
 from vk_api.utils import get_random_id
-from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 from vk_api.longpoll import VkLongPoll, VkEventType
 from const import TOKEN, nike_size, admin_id, load_photo
 from const import get_eur_Sber, get_eur_Tinkoff, get_eur_CB
@@ -17,6 +16,7 @@ upload = vk_api.VkUpload(vk_session)
 
 """ КНОПКИ """
 # для юзера
+from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 keyboard = VkKeyboard(one_time=False)
 keyboard.add_button('Калькулятор', color=VkKeyboardColor.SECONDARY)
 keyboard.add_button('Услуги группы', color=VkKeyboardColor.SECONDARY)
