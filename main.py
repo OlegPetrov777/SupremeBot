@@ -144,28 +144,7 @@ for event in long_poll.listen():
 
                 send_msg_eur(id, "Выберите необходимый Вам курс евро\n" +
                                  "Если такого нет, напишите его сами\n" +
-                                 "Например: 90.55")
-
-            elif check_userinfo(id)['status'] == "eur":
-                if msg[:8] == "Сбербанк" or msg[:8] == "Тинькофф":
-                    rub = float(msg[10:-1])
-                    change_user_rub(id, rub)
-                    change_userstatus(id, "sum")
-                    send_msg(id, "Введите стоимость каждого Вашего товара через пробел в евро\n" +
-                             "Например: 50 100 56")
-
-                elif re.match(r'^[0-9]{1,3}[,.]{1}[0-9]{1,3}$', msg):
-                    rub = float(msg.replace(",", "."))
-                    change_user_rub(id, rub)
-                    change_userstatus(id, "sum")
-                    send_msg(id, "Введите стоимость каждого Вашего товара через пробел в евро\n" +
-                             "Например: 50 100 56")
-                elif msg == "Назад":
-                    change_userstatus(id, "None")
-                    send_msg(id, "Вы вышли в главное меню")
-                else:
-                    send_msg_eur(id, "Не корректный ввод круса")
-
+                                 "Например: 90.55"
 
             elif msg.replace(" ", "").isdigit() and check_userinfo(id)['status'] == "sum":
                 dictt = msg.split(' ')
@@ -280,6 +259,26 @@ for event in long_poll.listen():
             elif msg == "/admin_983254":
                 admin_id = id
                 send_msg_admin(id, "Админка активирована")
+             
+            elif check_userinfo(id)['status'] == "eur":
+                if msg[:8] == "Сбербанк" or msg[:8] == "Тинькофф":
+                    rub = float(msg[10:-1])
+                    change_user_rub(id, rub)
+                    change_userstatus(id, "sum")
+                    send_msg(id, "Введите стоимость каждого Вашего товара через пробел в евро\n" +
+                             "Например: 50 100 56")
+
+                elif re.match(r'^[0-9]{1,3}[,.]{1}[0-9]{1,3}$', msg):
+                    rub = float(msg.replace(",", "."))
+                    change_user_rub(id, rub)
+                    change_userstatus(id, "sum")
+                    send_msg(id, "Введите стоимость каждого Вашего товара через пробел в евро\n" +
+                             "Например: 50 100 56")
+                elif msg == "Назад":
+                    change_userstatus(id, "None")
+                    send_msg(id, "Вы вышли в главное меню")
+                else:
+                    send_msg_eur(id, "Не корректный ввод круса")
 
 
 # АДМИНКА
