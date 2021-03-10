@@ -127,8 +127,6 @@ for event in long_poll.listen():
 # ФУНКЦИОНАЛ ОБЫЧНОГО ЮЗЕРА
         elif id != admin_id:
             
-            status = check_userinfo(id)["status"]
-            
             if msg.lower() == "/start" or msg.lower() == "начать" or msg.lower() == "старт":
                 send_msg(id, "Привет 😊")
                 send_msg(id, "Выберите действие\nИ нажмите на кнопку👇")
@@ -138,6 +136,88 @@ for event in long_poll.listen():
                     change_userstatus(id, "None")
                 else:
                     add_user(id, 0, "None")
+                    
+            elif msg == "Калькулятор":
+                send_msg(id, f"Курс евро в рублях:\n"
+                             f"📈 СберБанк: {get_eur_Sber()}₽\n"
+                             f"📉 Тинькофф: {get_eur_Tinkoff()}₽")
+
+                #  запиь в бд
+                if user_exists(id):
+                    change_userstatus(id, "eur")
+                else:
+                    add_user(id, 0, "eur")
+
+                send_msg_eur(id, "Выберите необходимый Вам курс евро\n" +
+                                 "Если такого нет, напишите его сами\n" +
+                                 "Например: 90.55"
+             
+            elif check_userinfo(id)["status"] == "eur":
+                if msg[:8] == "Сбербанк" or msg[:8] == "Тинькофф":
+                    rub = float(msg[10:-1])
+                    change_user_rub(id, rub)
+                    change_userstatus(id, "sum")
+                    send_msg(id, "Введите стоимость каждого Вашего товара через пробел в евро\n" +
+                             "Например: 50 100 56")
+
+                elif re.match(r'^[0-9]{1,3}[,.]{1}[0-9]{1,3}$', msg):
+                    rub = float(msg.replace(",", "."))
+                    change_user_rub(id, rub)
+                    change_userstatus(id, "sum")
+                    send_msg(id, "Введите стоимость каждого Вашего товара через пробел в евро\n" +
+                             "Например: 50 100 56")
+                elif msg == "Назад":
+                    change_userstatus(id, "None")
+                    send_msg(id, "Вы вышли в главное меню")
+                else:
+                    send_msg_eur(id, "Не корректный ввод круса")
+                         
+            elif msg.replace(" ", "").isdigit() and check_userinfo(id)["status"] == "sum":
+                dictt = msg.split(' ')
+                subtotal = 0
+
+                for i in dictt:
+                    subtotal = int(i) + subtotal
+
+                VAT = 0.8333333333  # НДС = 1 - 0.833333
+                postage = 36  # eur
+                total = 0
+                total_rub = 0
+                curs = float(check_userinfo(id)['rub'])
+
+                x = subtotal * VAT
+                if x >= 200:
+                    postage = 0
+                    customs = 1100  # руб
+                    tax = 0.15 * (subtotal * VAT - 200)
+                    total = x + tax  # итог в евро и еще нужно прибавить 1100
+                    total_rub = float(total) * curs + 1100
+                    change_userstatus(id, "None")
+                    send_msg(id, f"subtotal €{subtotal}\n" 
+                                 f"VAT discount -€{round(subtotal * (1 - VAT), 2)}\n" 
+                                 f"postage €{postage}\n" 
+                                 f"order total €{round(x, 2)} / {round(x * curs, 2)}₽\n"
+                                 f"➡ рассчитано по курсу: {curs}₽\n\n"
+                                 
+                                 f"налог 15%: €{round(tax, 2)} / {round(tax * get_eur_CB(), 2)}₽\n"
+                                 f"(рассчитано по курсу ЦБ: {get_eur_CB()}₽)\n"
+                                 f"таможенное оформление 1100₽\n"
+                                 f"итог налогов и сборов {round(tax * get_eur_CB(), 2) + 1100}₽\n\n"
+                                 
+                                 f"итоговая сумма заказа с налогами и сборами в рублях {round(total_rub, 3)}₽"
+                             )
+                else:
+                    VAT = (subtotal + postage) * (1 - VAT)
+                    total = subtotal + postage - VAT
+                    total_rub = float(total) * curs
+                    change_userstatus(id, "None")
+                    send_msg(id, f"subtotal €{subtotal}\n"
+                                 f"VAT discount -€{round(VAT, 2)}\n"
+                                 f"postage €{postage}\n"
+                                 f"order total €{round(total, 2)}\n\n"
+                                 f"итоговая сумма заказа в рублях {round(total_rub, 3)}₽\n"
+                                 f"➡ рассчитано по курсу: {curs}₽"
+                             )
 
             elif msg == "Услуги группы":
                 send_msg_product(id, "Cписок услуг")
@@ -205,89 +285,7 @@ for event in long_poll.listen():
             elif msg == "/admin_983254":
                 admin_id = id
                 send_msg_admin(id, "Админка активирована")
-                
-            elif msg == "Калькулятор":
-                send_msg(id, f"Курс евро в рублях:\n"
-                             f"📈 СберБанк: {get_eur_Sber()}₽\n"
-                             f"📉 Тинькофф: {get_eur_Tinkoff()}₽")
-
-                #  запиь в бд
-                if user_exists(id):
-                    change_userstatus(id, "eur")
-                else:
-                    add_user(id, 0, "eur")
-
-                send_msg_eur(id, "Выберите необходимый Вам курс евро\n" +
-                                 "Если такого нет, напишите его сами\n" +
-                                 "Например: 90.55"
-             
-            elif status == "eur":
-                if msg[:8] == "Сбербанк" or msg[:8] == "Тинькофф":
-                    rub = float(msg[10:-1])
-                    change_user_rub(id, rub)
-                    change_userstatus(id, "sum")
-                    send_msg(id, "Введите стоимость каждого Вашего товара через пробел в евро\n" +
-                             "Например: 50 100 56")
-
-                elif re.match(r'^[0-9]{1,3}[,.]{1}[0-9]{1,3}$', msg):
-                    rub = float(msg.replace(",", "."))
-                    change_user_rub(id, rub)
-                    change_userstatus(id, "sum")
-                    send_msg(id, "Введите стоимость каждого Вашего товара через пробел в евро\n" +
-                             "Например: 50 100 56")
-                elif msg == "Назад":
-                    change_userstatus(id, "None")
-                    send_msg(id, "Вы вышли в главное меню")
-                else:
-                    send_msg_eur(id, "Не корректный ввод круса")
-                         
-            elif msg.replace(" ", "").isdigit() and status == "sum":
-                dictt = msg.split(' ')
-                subtotal = 0
-
-                for i in dictt:
-                    subtotal = int(i) + subtotal
-
-                VAT = 0.8333333333  # НДС = 1 - 0.833333
-                postage = 36  # eur
-                total = 0
-                total_rub = 0
-                curs = float(check_userinfo(id)['rub'])
-
-                x = subtotal * VAT
-                if x >= 200:
-                    postage = 0
-                    customs = 1100  # руб
-                    tax = 0.15 * (subtotal * VAT - 200)
-                    total = x + tax  # итог в евро и еще нужно прибавить 1100
-                    total_rub = float(total) * curs + 1100
-                    change_userstatus(id, "None")
-                    send_msg(id, f"subtotal €{subtotal}\n" 
-                                 f"VAT discount -€{round(subtotal * (1 - VAT), 2)}\n" 
-                                 f"postage €{postage}\n" 
-                                 f"order total €{round(x, 2)} / {round(x * curs, 2)}₽\n"
-                                 f"➡ рассчитано по курсу: {curs}₽\n\n"
-                                 
-                                 f"налог 15%: €{round(tax, 2)} / {round(tax * get_eur_CB(), 2)}₽\n"
-                                 f"(рассчитано по курсу ЦБ: {get_eur_CB()}₽)\n"
-                                 f"таможенное оформление 1100₽\n"
-                                 f"итог налогов и сборов {round(tax * get_eur_CB(), 2) + 1100}₽\n\n"
-                                 
-                                 f"итоговая сумма заказа с налогами и сборами в рублях {round(total_rub, 3)}₽"
-                             )
-                else:
-                    VAT = (subtotal + postage) * (1 - VAT)
-                    total = subtotal + postage - VAT
-                    total_rub = float(total) * curs
-                    change_userstatus(id, "None")
-                    send_msg(id, f"subtotal €{subtotal}\n"
-                                 f"VAT discount -€{round(VAT, 2)}\n"
-                                 f"postage €{postage}\n"
-                                 f"order total €{round(total, 2)}\n\n"
-                                 f"итоговая сумма заказа в рублях {round(total_rub, 3)}₽\n"
-                                 f"➡ рассчитано по курсу: {curs}₽"
-                             )
-
+               
 
 # АДМИНКА
         elif id == admin_id:
