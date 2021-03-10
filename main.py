@@ -131,6 +131,11 @@ for event in long_poll.listen():
             if msg.lower() == "/start" or msg.lower() == "начать" or msg.lower() == "старт":
                 send_msg(id, "Привет 😊")
                 send_msg(id, "Выберите действие\nИ нажмите на кнопку👇")
+                #  запиь в бд
+                if user_exists(id):
+                    change_userstatus(id, "None")
+                else:
+                    add_user(id, 0, "None")
 
             elif msg == "Калькулятор":
                 send_msg(id, f"Курс евро в рублях:\n"
