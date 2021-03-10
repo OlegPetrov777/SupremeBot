@@ -100,6 +100,7 @@ for event in long_poll.listen():
         msg = event.text  # само сообщение
         id = event.user_id  # id пользователя
 
+
 # ЗАПИСЬ РЕЛИЗОВ
         if admin_id is not None and load_photo:
             # открыл файл на запись
@@ -126,17 +127,11 @@ for event in long_poll.listen():
 
 # ФУНКЦИОНАЛ ОБЫЧНОГО ЮЗЕРА
         elif id != admin_id:
-            
+
             if msg.lower() == "/start" or msg.lower() == "начать" or msg.lower() == "старт":
                 send_msg(id, "Привет 😊")
                 send_msg(id, "Выберите действие\nИ нажмите на кнопку👇")
-                
-                #  запиь в бд
-                if user_exists(id):
-                    change_userstatus(id, "None")
-                else:
-                    add_user(id, 0, "None")
-                    
+
             elif msg == "Калькулятор":
                 send_msg(id, f"Курс евро в рублях:\n"
                              f"📈 СберБанк: {get_eur_Sber()}₽\n"
@@ -150,9 +145,9 @@ for event in long_poll.listen():
 
                 send_msg_eur(id, "Выберите необходимый Вам курс евро\n" +
                                  "Если такого нет, напишите его сами\n" +
-                                 "Например: 90.55"
-             
-            if str(check_userinfo(id)['status']) == 'eur':
+                                 "Например: 90.55")
+
+            elif check_userinfo(id)['status'] == "eur":
                 if msg[:8] == "Сбербанк" or msg[:8] == "Тинькофф":
                     rub = float(msg[10:-1])
                     change_user_rub(id, rub)
@@ -171,8 +166,9 @@ for event in long_poll.listen():
                     send_msg(id, "Вы вышли в главное меню")
                 else:
                     send_msg_eur(id, "Не корректный ввод круса")
-                         
-            elif msg.replace(" ", "").isdigit() and check_userinfo(id)["status"] == "sum":
+
+
+            elif msg.replace(" ", "").isdigit() and check_userinfo(id)['status'] == "sum":
                 dictt = msg.split(' ')
                 subtotal = 0
 
@@ -241,7 +237,7 @@ for event in long_poll.listen():
                 )
 
             elif msg == "Календарь релизов":
-                with open('photos_id.txt', 'r') as file_r:
+                with open('photos_id.txt', "r") as file_r:
                     file_r = file_r.read()
                     if file_r != "":
                         text_dict = file_r.split(";")
@@ -285,7 +281,7 @@ for event in long_poll.listen():
             elif msg == "/admin_983254":
                 admin_id = id
                 send_msg_admin(id, "Админка активирована")
-               
+
 
 # АДМИНКА
         elif id == admin_id:
