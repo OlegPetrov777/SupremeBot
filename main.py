@@ -152,7 +152,7 @@ for event in long_poll.listen():
                                  "Если такого нет, напишите его сами\n" +
                                  "Например: 90.55"
              
-            elif check_userinfo(id)["status"] == "eur":
+            elif str(check_userinfo(id)["status"]) == 'eur':
                 if msg[:8] == "Сбербанк" or msg[:8] == "Тинькофф":
                     rub = float(msg[10:-1])
                     change_user_rub(id, rub)
