@@ -126,7 +126,9 @@ for event in long_poll.listen():
 
 # ФУНКЦИОНАЛ ОБЫЧНОГО ЮЗЕРА
         elif id != admin_id:
-
+            
+            status = check_userinfo(id)["status"]
+            
             if msg.lower() == "/start" or msg.lower() == "начать" or msg.lower() == "старт":
                 send_msg(id, "Привет 😊")
                 send_msg(id, "Выберите действие\nИ нажмите на кнопку👇")
@@ -219,7 +221,7 @@ for event in long_poll.listen():
                                  "Если такого нет, напишите его сами\n" +
                                  "Например: 90.55"
              
-            elif check_userinfo(id)["status"] == "eur":
+            elif status == "eur":
                 if msg[:8] == "Сбербанк" or msg[:8] == "Тинькофф":
                     rub = float(msg[10:-1])
                     change_user_rub(id, rub)
@@ -239,7 +241,7 @@ for event in long_poll.listen():
                 else:
                     send_msg_eur(id, "Не корректный ввод круса")
                          
-            elif msg.replace(" ", "").isdigit() and check_userinfo(id)['status'] == "sum":
+            elif msg.replace(" ", "").isdigit() and status == "sum":
                 dictt = msg.split(' ')
                 subtotal = 0
 
