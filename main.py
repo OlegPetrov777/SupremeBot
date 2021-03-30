@@ -223,13 +223,21 @@ for event in long_poll.listen():
             elif msg == "Услуги группы":
                 send_msg_product(id, "Cписок услуг")
             elif msg == "Legit Check":
-                send_msg_product(id, "https://vk.cc/bYZ4Zy")
+                send_msg_product(id, "vk.cc/bYZ4Zy")
             elif msg == "Гарант":
                 send_msg_product(id, "vk.cc/anAhxW")
             elif msg == "Продажа за границу":
-                send_msg_product(id, "https://vk.cc/bYZ5fd")
+                send_msg_product(id, "vk.cc/bYZ5fd")
             elif msg == "Реклама":
-                send_msg_product(id, "Скоро будет!")
+                send_msg_product(id, """Мы открыты к сотрудничеству с интересными проектами. У нас вы можете заказать платную рекламу или договориться о взаимной.
+
+Мы не рекламируем: рефанд-кард сообщества, пальшопы и прочие группы, противоречащие нашему мировоззрению.
+
+Реклама в истории — 200р
+Репост (не удаляется) — 400р
+Нативная рекламная интеграция — цена обсуждается индивидуально
+
+Контактное лицо по вопросам рекламы: vk.com/ersheshken""")
             elif msg == "Назад":
                 send_msg(id, "Вы вышли в главное Меню")
 
